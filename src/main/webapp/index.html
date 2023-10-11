@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Calumet Ejercicio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="index.css" rel="stylesheet">
+    <script>
+      const myHeaders = new Headers();
+      myHeaders.append("proccess", "getAllClients")
+
+      const url = "index.jsp";
+      const options = {
+        headers: myHeaders,
+        mode: "no-cors",
+      }
+
+      fetch(url, options)
+        .then(data => {
+          return data.json()
+        })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    </script>
+  </head>
+  <body>
+    <h1>Hola desde la aplicación</h1>
+  </body>
+</html>

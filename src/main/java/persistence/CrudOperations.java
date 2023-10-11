@@ -7,17 +7,26 @@
  */
 package persistence;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import utility.ConnectionDB;
 
 public abstract class CrudOperations {
-  private ConnectionDB cDB = new ConnectionDB("calumet-ejercicio", "localhost:3306", "javaApp", "javaApp");
+  private ConnectionDB cDB = new ConnectionDB("calumet_ejercicio", "localhost:3306", "javaApp", "javaApp");
   private Connection conn = cDB.getConnection();
   private String entity;
 
+  /**
+   * Configura el objeto para que utilice las operaciones CRUD sobre la entidad
+   * que se indique.
+   *
+   * @param entity Nombre de la entidad como está identificada en BD.
+   */
   public CrudOperations(String entity) {
     if (!(entity.isBlank())) {
       this.entity = entity;
@@ -30,7 +39,7 @@ public abstract class CrudOperations {
    * @return Todos los registros encontrados en la tabla de la entidad. Si la
    *         operación falló entonces devuelve nulo.
    */
-  public ResultSet getAll() {
+  protected ResultSet getAll() {
     Statement stmt;
     ResultSet rs = null;
     String selecQuery = "SELECT * FROM " + entity;

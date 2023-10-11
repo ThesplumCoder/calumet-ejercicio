@@ -15,26 +15,31 @@ Para esta aplicación se decidió usar MySQL como gestor de base de datos.
 ### Códigos para la Creación de la Base de Datos
 Creación de base de datos.
 ```SQL
-CREATE DATABASE calumet-ejercicio;
-USE calumet-ejercicio;
+CREATE DATABASE calumet_ejercicio;
+USE calumet_ejercicio;
+```
+Creamos el usuario con el que vamos a acceder:
+```SQL
+CREATE USER 'javaApp'@'%' IDENTIFIED BY 'javaApp';
+GRANT ALL ON calumet_ejercicio.* TO 'javaApp'@'%';
 ```
 Creación de tablas.
 ```SQL
 CREATE TABLE client (
-id INT UNSIGNED AUTO_INCREMENT,
+id_client INT UNSIGNED AUTO_INCREMENT,
 name VARCHAR(100),
 telephone_number VARCHAR(20),
-PRIMARY KEY (id)
+PRIMARY KEY (id_client)
 ) TYPE=INNODB;
 
 CREATE TABLE order (
-id INT UNSIGNED AUTO_INCREMENT,
-client BIGINT NOT NULL,
+id_order INT UNSIGNED AUTO_INCREMENT,
+id_client BIGINT NOT NULL,
 pizza_flavor VARCHAR(50) NOT NULL,
 notes VARCHAR(100),
-PRIMARY KEY (id),
-INDEX (client),
-FOREIGN KEY (client) REFERENCES client(id)
+PRIMARY KEY (id_order),
+INDEX (id_client),
+FOREIGN KEY (id_client) REFERENCES client(id_client)
 ) TYPE=INNODB;
 ```
 Registros básicos para poblar la base de datos.
