@@ -44,7 +44,7 @@ public abstract class CrudOperations {
   protected ResultSet getAll() {
     Statement stmt;
     ResultSet rs = null;
-    String selecQuery = "SELECT * FROM " + entity;
+    String selecQuery = "SELECT * FROM " + entity + ";";
 
     try {
       stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -67,24 +67,29 @@ public abstract class CrudOperations {
       throw new CrudOperationsException("The amount of columns against the values is different.");
     }
 
-    int amountColumns;
     Statement stmt;
-    String columnOrder;
-    String[] columnsArr;
-    String valuesOrder;
     String insertQuery;
 
-    amountColumns = columns.size();
-    columnsArr = (String[]) columns.toArray();
-    columnOrder = new String();
-    columnOrder += "(";
-    for(int i = 0; i < amountColumns; i++) {
-      columnOrder += columnsArr[i];
-      if(i != (amountColumns - 1)) {
-        columnOrder += ",";
-      }
+    String unitedValues = stringsCommaSprtd(values);
+    String unitedColumns = stringsCommaSprtd(columns);
+    insertQuery = "INSERT INTO " + entity + "(" + unitedColumns + ")" + " VALUES (" + unitedValues + ");";
+  }
+
+  /**
+   * Permite concantenar los elementos de una lista de palabras en un solo objeto.
+   *
+   * Con la lista que recibe la recorre para ir agregando cada elemento a la cadena de respuesta, y a cada uno lo va separando con comas.
+   *
+   * @param words Lista de palabras a unir.
+   * @return Cadena con todas las palabras de la lista suministrada, separadas por comas.
+   */
+  private String stringsCommaSprtd(List<String> words) {
+    StringBuilder res = new StringBuilder();
+
+    for(String word : words) {
+      res.append(word + ",");
     }
-    columnOrder += ")";
-    insertQuery = "INSERT INTO " + entity + columnOrder + " VALUES ";
+    res.deleteCharAt(res.length() - 1);
+    return res.toString();
   }
 }
