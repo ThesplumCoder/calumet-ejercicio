@@ -26,35 +26,38 @@ GRANT ALL ON calumet_ejercicio.* TO 'javaApp'@'%';
 Creación de tablas.
 ```SQL
 CREATE TABLE client (
-id_client INT UNSIGNED AUTO_INCREMENT,
+id INT UNSIGNED AUTO_INCREMENT,
 name VARCHAR(100),
 telephone_number VARCHAR(20),
-PRIMARY KEY (id_client)
-) TYPE=INNODB;
+PRIMARY KEY (id)
+);
 
 CREATE TABLE order (
-id_order INT UNSIGNED AUTO_INCREMENT,
+id INT UNSIGNED AUTO_INCREMENT,
 id_client BIGINT NOT NULL,
 pizza_flavor VARCHAR(50) NOT NULL,
 notes VARCHAR(100),
-PRIMARY KEY (id_order),
+PRIMARY KEY (id),
 INDEX (id_client),
-FOREIGN KEY (id_client) REFERENCES client(id_client)
-) TYPE=INNODB;
+FOREIGN KEY (id_client) REFERENCES client(id)
+);
 ```
 Registros básicos para poblar la base de datos.
 ```SQL
 INSERT INTO client VALUES (
+1,
 "Juan Andrés Perez",
 "+57 3213749045"
 );
 
 INSERT INTO client VALUES (
+2,
 "Andrés Felipe Rodríguez",
 "+57 3105244759"
 );
 
 INSERT INTO client VALUES (
+3,
 "Oscar Galindo Gómez",
 "+57 3174825789"
 );

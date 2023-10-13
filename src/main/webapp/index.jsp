@@ -27,14 +27,14 @@
           res += "\"" + proccess + "\": true,\"Clients\":" + new Gson().toJson(clients); 
 
         } catch (Exception ex) {
-          res += "\"" + proccess + "\": true,\"Clients\":[]";
+          res += "\"" + proccess + "\": false,\"Clients\":[]";
           Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
   } else {
     res += "\"ok\": false,";
     res += "\"error\": \"INVALID\",";
-    res += "\"errorMsg\": \"This request has invalid or incorrect fields.\",";
+    res += "\"errorMsg\": \"This request has invalid or incorrect fields.\"";
   }
 
   res += "}";
