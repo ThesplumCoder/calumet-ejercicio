@@ -1,4 +1,6 @@
 <%@page import="com.google.gson.Gson"%>
+<%@page import="com.google.gson.JsonObject"%>
+<%@page import="java.io.BufferedReader"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.logging.Logger"%>
@@ -13,6 +15,8 @@
   String res = "{";
   List<String> clientsMethods = new ArrayList<>();
   clientsMethods.add("getAllClients");
+  clientsMethods.add("addOneClient");
+  clientsMethods.add("deleteById");
   
   String proccess = request.getHeader("proccess");
 
@@ -28,6 +32,34 @@
 
         } catch (Exception ex) {
           res += "\"" + proccess + "\": false,\"Clients\":[]";
+          Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        break;
+      case "addOneClient":
+        try {
+          BufferedReader dataSend = request.getReader();
+          JsonObject body = new Gson().fromJson(dataSend, JsonObject.class);
+          Long id = Long.valueOf(body.get("id").getAsLong());
+          String name = body.get("name").getAsString();
+          String telephoneNumber = body.get("telephoneNumber").getAsString();
+
+          clientData.addOneClient(id, name, telephoneNumber);
+          res += "\"" + proccess + "\": true";
+        } catch(Exception ex) {
+          res += "\"" + proccess + "\": false,\"message\": \"An exception has occur.\""; 
+          Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        break;
+      case "deleteById":
+        try {
+          BufferedReader dataSend = request.getReader();
+          JsonObject body = new Gson().fromJson(dataSend, JsonObject.class);
+          Long id = Long.valueOf(body.get("id").getAsLong());
+
+          clientData.deleteById(id);
+          res += "\"" + proccess + "\": true";
+        } catch(Exception ex) {
+          res += "\"" + proccess + "\": false,\"message\": \"An exception has occur.\""; 
           Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

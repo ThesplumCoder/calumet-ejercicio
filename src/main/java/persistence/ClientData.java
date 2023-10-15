@@ -58,4 +58,31 @@ public class ClientData extends CrudOperations {
     }
     return clients;
   }
+
+  /**
+   * Inserta un cliente en la BD con los datos especificados.
+   *
+   * @param id              Identificador único del cliente nuevo.
+   * @param name            Nombre del cliente nuevo.
+   * @param telephoneNumber Número telefónico del cliente nuevo.
+   */
+  public void addOneClient(Long id, String name, String telephoneNumber) {
+    List<String> data = new ArrayList<String>();
+    data.add(id.toString());
+    data.add("\"" + name + "\"");
+    data.add("\"" + telephoneNumber + "\"");
+
+    addOne(data);
+  }
+
+  /**
+   * Elimina un cliente utilizando su identificador único.
+   *
+   * @param id Identificador único del cliente que se desea eliminar.
+   */
+  public void deleteById(Long id) {
+    String idStr = id.toString();
+
+    deleteByParameter("id", idStr);
+  }
 }

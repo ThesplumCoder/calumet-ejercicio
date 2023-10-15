@@ -57,13 +57,36 @@ public abstract class CrudOperations {
   }
 
   /**
-   * Inserta un registro en la tabla de la entidad.[WIP]
+   * Inserta un registro en la tabla de la entidad.
    *
-   * @param columns Una lista con todos los nombres de columnas que se quieren tomar en cuenta para hacer la inserción. Se toma en cuenta el orden en que están en la lista.
    * @param values Valores de la entidad que se quiere registrar en BD.
    */
+  protected void addOne(List<String> values) {
+    Statement stmt;
+    String insertQuery;
+
+    String unitedValues = stringsCommaSprtd(values);
+    insertQuery = "INSERT INTO " + entity + " VALUES (" + unitedValues + ");";
+    System.out.println(insertQuery);
+
+    try {
+      stmt = conn.createStatement();
+      stmt.execute(insertQuery);
+    } catch (SQLException sqlex) {
+      sqlex.printStackTrace();
+    }
+  }
+
+  /**
+   * Inserta un registro en la tabla de la entidad.
+   *
+   * @param columns Una lista con todos los nombres de columnas que se quieren
+   *                tomar en cuenta para hacer la inserción. Se toma en cuenta el
+   *                orden en que están en la lista.
+   * @param values  Valores de la entidad que se quiere registrar en BD.
+   */
   protected void addOne(List<String> columns, List<String> values) throws CrudOperationsException {
-    if(columns.size() != values.size()) {
+    if (columns.size() != values.size()) {
       throw new CrudOperationsException("The amount of columns against the values is different.");
     }
 
@@ -73,23 +96,53 @@ public abstract class CrudOperations {
     String unitedValues = stringsCommaSprtd(values);
     String unitedColumns = stringsCommaSprtd(columns);
     insertQuery = "INSERT INTO " + entity + "(" + unitedColumns + ")" + " VALUES (" + unitedValues + ");";
+
+    try {
+      stmt = conn.createStatement();
+      stmt.execute(insertQuery);
+    } catch (SQLException sqlex) {
+      sqlex.printStackTrace();
+    }
   }
 
   /**
    * Permite concantenar los elementos de una lista de palabras en un solo objeto.
    *
-   * Con la lista que recibe la recorre para ir agregando cada elemento a la cadena de respuesta, y a cada uno lo va separando con comas.
+   * Con la lista que recibe la recorre para ir agregando cada elemento a la
+   * cadena de respuesta, y a cada uno lo va separando con comas.
    *
    * @param words Lista de palabras a unir.
-   * @return Cadena con todas las palabras de la lista suministrada, separadas por comas.
+   * @return Cadena con todas las palabras de la lista suministrada, separadas por
+   *         comas.
    */
   private String stringsCommaSprtd(List<String> words) {
     StringBuilder res = new StringBuilder();
 
-    for(String word : words) {
+    for (String word : words) {
       res.append(word + ",");
     }
     res.deleteCharAt(res.length() - 1);
     return res.toString();
+  }
+
+  /**
+   * Elimina registros en BD según el parámetro escogido para filtrar y su valor
+   * deseado para el o los registros que son objetivo.
+   *
+   * @param parameter Nombre de la columna por la que se desea filtrar.
+   * @param value     Valor que debe tener el registro en la columna especificada
+   *                  para ser tenido en cuenta en la eliminación.
+   */
+  protected void deleteByParameter(String parameter, String value) {
+    Statement stmt;
+    String delByParam;
+
+    delByParam = "DELETE FROM " + entity + " WHERE " + parameter + "=" + value + ";";
+    try {
+      stmt = conn.createStatement();
+      stmt.execute(delByParam);
+    } catch (SQLException sqlex) {
+      sqlex.printStackTrace();
+    }
   }
 }

@@ -5,28 +5,101 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="index.css" rel="stylesheet">
-    <script>
-      const myHeaders = new Headers();
-      myHeaders.append("proccess", "getAllClients")
-
-      const url = "index.jsp";
-      const options = {
-        headers: myHeaders,
-      }
-
-      fetch(url, options)
-        .then(data => {
-          return data.json()
-        })
-        .then(res => {
-          console.log(res)
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.32/angular.min.js"></script>
   </head>
-  <body>
-    <h1>Hola desde la aplicación</h1>
+  <body ng-app="myApp">
+    <h1>Pizza Application</h1>
+    <section ng-controller="clients-controller as clientsCtrl">
+      <h2>Operations</h2>
+      <div>
+        <p>Add client</p>
+        <input type="text" ng-model="clientsCtrl.idClient" placeholder="Id">
+        <input type="text" ng-model="clientsCtrl.nameClient" placeholder="Name">
+        <input type="text" ng-model="clientsCtrl.telephoneNumberClient" placeholder="Telephone Number">
+        <button ng-click="clientsCtrl.addOneClient()">Add</button>
+      </div>
+      <div>
+        <p>Delete a client</p>
+        <input type="text" ng-model="clientsCtrl.idClient" placeholder="Id">
+        <button ng-click="clientsCtrl.deleteById()">Delete</button>
+      </div>
+      <h2>Data</h2>
+      <div>
+        <table>
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Telephone Number</th>
+          </tr>
+          <tr ng-repeat="client in clientsCtrl.clients">
+            <td>{{client.id}}</td>
+            <td>{{client.name}}</td>
+            <td>{{client.telephoneNumber}}</td>
+          </tr>
+        </table>
+      </div>
+    </section>
+    <script>
+      let app = angular.module("myApp", []);
+
+      app.controller("clients-controller", function($scope, $http) {
+        let clientsCtrl = this;
+
+        clientsCtrl.clients = [];
+
+        clientsCtrl.getAllClients = function() {
+          let config = {
+            headers: {
+              "proccess": "getAllClients"
+            }
+          }
+          $http.get("index.jsp", config)
+            .then( function(res) {
+              clientsCtrl.clients = res.data.Clients;
+            });
+        }
+
+        clientsCtrl.addOneClient = function() {
+          let config = {
+            headers: {
+              "proccess": "addOneClient"
+            }
+          }
+          let data = {
+            id: clientsCtrl.idClient,
+            name: clientsCtrl.nameClient,
+            telephoneNumber: clientsCtrl.telephoneNumberClient
+          }
+          console.log(data)
+
+          $http.post("index.jsp", data, config)
+            .then( function(res) {
+              console.log("Creation successful.");
+              window.location.reload();
+            });
+        }
+
+        clientsCtrl.deleteById = function() {
+          let config = {
+            headers: {
+              "proccess": "deleteById"
+            }
+          }
+          let data = {
+            id: clientsCtrl.idClient,
+          }
+          console.log(data)
+
+          $http.post("index.jsp", data, config)
+            .then( function(res) {
+              console.log("Deletion successful.");
+              window.location.reload();
+            });
+        }
+        window.onload = function() {
+          clientsCtrl.getAllClients();
+        }
+      });
+    </script>
   </body>
 </html>
