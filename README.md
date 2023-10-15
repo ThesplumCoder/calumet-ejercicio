@@ -11,7 +11,7 @@ aproximadente cuantas pizzas de un mismo sabor hacer para mantener una alta efic
 ## Base de Datos
 Para esta aplicación se decidió usar MySQL como gestor de base de datos.
 ### Modelo Relacional
-
+![Modelo relacional](./images/ERModel.jpeg)
 ### Códigos para la Creación de la Base de Datos
 Creación de base de datos.
 ```SQL
@@ -80,5 +80,3 @@ INSERT INTO order VALUES (
 ""
 );
 ```
-
-## Diagrama de Clases
